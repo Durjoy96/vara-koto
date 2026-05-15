@@ -2,20 +2,16 @@
 
 import { DistrictsCombobox } from "@/components/districts-combobox";
 import { Button } from "@/components/ui/button";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldLabel,
-  FieldTitle,
-} from "@/components/ui/field";
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { RadioGroup } from "@/components/ui/radio-group";
 import RadioVehicleCard from "@/components/radio-vehicle-card";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusCircleIcon } from "lucide-react";
+import { LucideArrowRight } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 interface vehiclesOptions {
   id: string;
@@ -54,24 +50,35 @@ export default function Add() {
 
   const [vehicle, setVehicle] = useState(vehicleDefaultValue);
   const [district, setDistrict] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const formHandler = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.target;
-    const fromName = form.fromName.value;
-    const toName = form.toName.value;
-    const fare = form.fare.value;
-    const tips = form.tips.value || null;
-    const { data, error } = await supabase.from("fares").insert({
-      fromName: fromName,
-      toName: toName,
-      fare: fare,
-      vehicle: vehicle,
-      district: district,
-      tips: tips,
-    });
-    console.log(data);
-    console.log(error);
+    try {
+      setLoading(true);
+      e.preventDefault();
+      const form = e.target;
+      const fromName = form.fromName.value;
+      const toName = form.toName.value;
+      const fare = form.fare.value;
+      const tips = form.tips.value || null;
+      const { data, error } = await supabase.from("fares").insert({
+        fromName: fromName,
+        toName: toName,
+        fare: fare,
+        vehicle: vehicle,
+        district: district,
+        tips: tips,
+      });
+
+      if (error) throw error;
+
+      toast.success("ভাড়া সফলভাবে যুক্ত হয়েছে", { position: "top-center" });
+    } catch (error) {
+      toast.error("ভাড়া যুক্ত করা যায়নি", { position: "top-center" });
+    } finally {
+      setLoading(false);
+      e.target.reset();
+    }
   };
 
   return (
@@ -104,7 +111,7 @@ export default function Add() {
                 name="toName"
                 id="to-where"
                 placeholder="তেতুলিয়া"
-                className="h-12"
+                className="text-sm lg:text-base h-11 lg:h-12"
               />
             </Field>
             {/* fare */}
@@ -114,7 +121,7 @@ export default function Add() {
                 name="fare"
                 id="fare"
                 placeholder="২০০০"
-                className="h-12"
+                className="text-sm lg:text-base h-11 lg:h-12"
                 type="number"
               />
             </Field>
@@ -151,8 +158,19 @@ export default function Add() {
           </div>
           {/* submit */}
           <div className="mt-8">
-            <Button className="px-12 h-12 w-full lg:w-auto cursor-pointer">
-              <PlusCircleIcon /> যুক্ত করুন
+            <Button
+              disabled={loading}
+              className="px-6 h-11 w-full lg:w-auto cursor-pointer"
+            >
+              {loading ? (
+                <>
+                  <Spinner data-icon="inline-start" /> যুক্ত করা হচ্ছে...
+                </>
+              ) : (
+                <>
+                  যুক্ত করুন <LucideArrowRight />
+                </>
+              )}
             </Button>
           </div>
         </form>

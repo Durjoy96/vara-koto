@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hind_Siliguri } from "next/font/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const hindSiliguri = Hind_Siliguri({
@@ -23,7 +24,10 @@ export default function RootLayout({
       lang="en"
       className={`${hindSiliguri.variable} min-h-full antialiased`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
