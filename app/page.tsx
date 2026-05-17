@@ -1,6 +1,4 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import Search from "@/components/search";
 
 export default function Home() {
   return (
@@ -9,14 +7,7 @@ export default function Home() {
         <h3 className="text-2xl font-bold">ভাড়া কত?</h3>
       </div>
       {/* search */}
-      <div className="space-y-3 max-w-lg mx-auto mt-16">
-        <Input placeholder="কোথা থেকে" className="h-12" />
-        <Input placeholder="কোথায়" className="h-12" />
-        <Button className="w-full cursor-pointer h-12 mt-5">
-          {" "}
-          <Search /> ভাড়া খুঁজুন
-        </Button>
-      </div>
+      <Search />
     </main>
   );
 }

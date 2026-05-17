@@ -12,6 +12,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { LucideArrowRight } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
+import isBangla from "@/utils/isBangla";
+import BanglishToBangla from "@/utils/banglish-to-bangla";
 
 interface vehiclesOptions {
   id: string;
@@ -57,13 +59,20 @@ export default function Add() {
       setLoading(true);
       e.preventDefault();
       const form = e.target;
-      const fromName = form.fromName.value;
-      const toName = form.toName.value;
+      const originalFrom = form.fromName.value.toLowerCase().trim();
+      const originalTo = form.toName.value.toLowerCase().trim();
       const fare = form.fare.value;
       const tips = form.tips.value || null;
+      console.log(BanglishToBangla("Tarakandi"));
       const { data, error } = await supabase.from("fares").insert({
-        fromName: fromName,
-        toName: toName,
+        original_from: originalFrom,
+        standardized_from_bn: !isBangla(originalFrom)
+          ? await BanglishToBangla(originalFrom)
+          : originalFrom,
+        original_to: originalTo,
+        standardized_to_bn: !isBangla(originalTo)
+          ? await BanglishToBangla(originalTo)
+          : originalTo,
         fare: fare,
         vehicle: vehicle,
         district: district,
@@ -77,7 +86,7 @@ export default function Add() {
       toast.error("ভাড়া যুক্ত করা যায়নি", { position: "top-center" });
     } finally {
       setLoading(false);
-      e.target.reset();
+      // e.target.reset();
     }
   };
 
