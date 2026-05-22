@@ -86,7 +86,7 @@ export default function Add() {
       toast.error("ভাড়া যুক্ত করা যায়নি", { position: "top-center" });
     } finally {
       setLoading(false);
-      // e.target.reset();
+      e.target.reset();
     }
   };
 
