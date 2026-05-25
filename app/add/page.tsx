@@ -2,10 +2,13 @@
 
 import { DistrictsCombobox } from "@/components/districts-combobox";
 import { Button } from "@/components/ui/button";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { RadioGroup } from "@/components/ui/radio-group";
-import RadioVehicleCard from "@/components/radio-vehicle-card";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,13 +17,14 @@ import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import isBangla from "@/utils/isBangla";
 import BanglishToBangla from "@/utils/banglish-to-bangla";
+import CheckboxVehcileCard from "@/components/checkbox-vehicle-card";
 
 interface vehiclesOptions {
   id: string;
   title: string;
 }
 
-const vehicles: vehiclesOptions[] = [
+const vehiclesList: vehiclesOptions[] = [
   {
     id: "rickshaw",
     title: "রিকশা",
@@ -48,9 +52,7 @@ const vehicles: vehiclesOptions[] = [
 ];
 
 export default function Add() {
-  const vehicleDefaultValue = "rickshaw";
-
-  const [vehicle, setVehicle] = useState(vehicleDefaultValue);
+  const [vehicles, setVehicles] = useState<string[]>([]);
   const [district, setDistrict] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -58,12 +60,18 @@ export default function Add() {
     try {
       setLoading(true);
       e.preventDefault();
+      // check if vehicles is empty
+      if (vehicles.length === 0) {
+        toast.error("অনুগ্রহ করে যানবাহনের ধরন সিলেক্ট করুন", {
+          position: "top-center",
+        });
+        return;
+      }
       const form = e.target;
       const originalFrom = form.fromName.value.toLowerCase().trim();
       const originalTo = form.toName.value.toLowerCase().trim();
       const fare = form.fare.value;
       const tips = form.tips.value || null;
-      console.log(BanglishToBangla("Tarakandi"));
       const { data, error } = await supabase.from("fares").insert({
         original_from: originalFrom,
         standardized_from_bn: !isBangla(originalFrom)
@@ -74,7 +82,7 @@ export default function Add() {
           ? await BanglishToBangla(originalTo)
           : originalTo,
         fare: fare,
-        vehicle: vehicle,
+        vehicles: vehicles,
         district: district,
         tips: tips,
       });
@@ -82,11 +90,13 @@ export default function Add() {
       if (error) throw error;
 
       toast.success("ভাড়া সফলভাবে যুক্ত হয়েছে", { position: "top-center" });
+      form.reset();
+      setVehicles([]);
+      setDistrict(null);
     } catch (error) {
       toast.error("ভাড়া যুক্ত করা যায়নি", { position: "top-center" });
     } finally {
       setLoading(false);
-      e.target.reset();
     }
   };
 
@@ -111,6 +121,7 @@ export default function Add() {
                 id="from-where"
                 placeholder="টেকনাফ"
                 className="text-sm lg:text-base h-11 lg:h-12"
+                required={true}
               />
             </Field>
             {/* to where */}
@@ -121,6 +132,7 @@ export default function Add() {
                 id="to-where"
                 placeholder="তেতুলিয়া"
                 className="text-sm lg:text-base h-11 lg:h-12"
+                required={true}
               />
             </Field>
             {/* fare */}
@@ -132,20 +144,29 @@ export default function Add() {
                 placeholder="২০০০"
                 className="text-sm lg:text-base h-11 lg:h-12"
                 type="number"
+                required={true}
               />
             </Field>
             {/* vehicle type */}
             <Field>
               <FieldLabel>যানবাহন</FieldLabel>
-              <RadioGroup
-                onValueChange={(value) => setVehicle(value)}
-                defaultValue={vehicleDefaultValue}
-                className="w-full grid grid-cols-3 lg:grid-cols-৪"
-              >
-                {vehicles.map((i, idx) => (
-                  <RadioVehicleCard key={idx} id={i.id} title={i.title} />
+              <FieldGroup className="w-full grid grid-cols-3 lg:grid-cols-৪">
+                {vehiclesList.map((i, idx) => (
+                  <CheckboxVehcileCard
+                    key={idx}
+                    id={i.id}
+                    title={i.title}
+                    checked={vehicles.includes(i.id)}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setVehicles((prev) => [...prev, i.id]);
+                      } else {
+                        setVehicles((prev) => prev.filter((v) => v !== i.id));
+                      }
+                    }}
+                  />
                 ))}
-              </RadioGroup>
+              </FieldGroup>
             </Field>
             {/* select area (optional) */}
             <Field>
