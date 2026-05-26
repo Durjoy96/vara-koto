@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="max-w-7xl mx-auto px-5 pt-4">
+    <main className="max-w-7xl mx-auto px-5 py-4">
       <div className="w-full flex items-center justify-between">
         <h3 className="text-xl lg:text-2xl font-bold">ভাড়া কত?</h3>
         <Link href="/add">
@@ -14,7 +14,7 @@ export default function Home() {
           </Button>
         </Link>
       </div>
-      <div className="mt-12 lg:mt-16 mb-8 lg:mb-10 mx-auto max-w-xl text-center">
+      <div className="mt-12 lg:mt-14 mb-8 lg:mb-10 mx-auto max-w-xl text-center">
         <h1 className="text-4xl lg:text-5xl font-bold tracking-tight leading-normal">
           যাত্রার আগে{" "}
           <span className="relative whitespace-nowrap py-0 px-2">

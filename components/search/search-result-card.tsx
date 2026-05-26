@@ -8,8 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Button } from "../ui/button";
-import { ArrowRight, ThumbsUp, ThumbsDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { englishToBanglaNumber } from "@/utils/english-to-bangla-number";
 
 export default function SearchResultCard({ data }: { data: any }) {
@@ -45,7 +44,9 @@ export default function SearchResultCard({ data }: { data: any }) {
           </span>
         </CardTitle>
         <CardDescription className="text-sm lg:text-base font-medium">
-          {data?.vehicle || "Vehicle Type"}
+          {data?.vehicles.map((v: string, idx: number) => (
+            <span key={idx}>{v}</span>
+          ))}
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-5">
@@ -58,51 +59,6 @@ export default function SearchResultCard({ data }: { data: any }) {
               ৳ {englishToBanglaNumber(data?.fare || 0)}
             </p>
           </div>
-
-          {/* Upvote & Downvote Component */}
-          {/*    <div className="flex items-center bg-muted/40 rounded-full border border-border shadow-sm p-1">
-            <div className="flex items-center">
-              <Button
-                onClick={handleUpvote}
-                variant="ghost"
-                size="icon"
-                className={`h-9 w-9 rounded-full transition-colors ${
-                  hasVoted === "up"
-                    ? "text-green-600 bg-green-100 hover:bg-green-200 dark:bg-green-900/40 dark:hover:bg-green-900/60"
-                    : "text-muted-foreground hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20"
-                }`}
-              >
-                <ThumbsUp
-                  className={`h-4 w-4 ${hasVoted === "up" ? "fill-green-600" : ""}`}
-                />
-              </Button>
-              <span className="text-sm font-bold text-foreground px-1.5 min-w-4 text-center">
-                {englishToBanglaNumber(upvotes)}
-              </span>
-            </div>
-
-            <div className="w-px h-5 bg-border mx-1"></div>
-
-            <div className="flex items-center">
-              <span className="text-sm font-bold text-foreground px-1.5 min-w-4 text-center">
-                {englishToBanglaNumber(downvotes)}
-              </span>
-              <Button
-                onClick={handleDownvote}
-                variant="ghost"
-                size="icon"
-                className={`h-9 w-9 rounded-full transition-colors ${
-                  hasVoted === "down"
-                    ? "text-red-600 bg-red-100 hover:bg-red-200 dark:bg-red-900/40 dark:hover:bg-red-900/60"
-                    : "text-muted-foreground hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-                }`}
-              >
-                <ThumbsDown
-                  className={`h-4 w-4 ${hasVoted === "down" ? "fill-red-600" : ""}`}
-                />
-              </Button>
-            </div>
-          </div> */}
         </div>
       </CardContent>
     </Card>

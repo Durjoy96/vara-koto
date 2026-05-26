@@ -39,11 +39,11 @@ export default function Search() {
     const { data, error } = await supabase
       .from("fares")
       .select("*")
-      .eq("standardized_from_bn", fromValue)
-      .eq("standardized_to_bn", toValue);
+      .ilike("standardized_from_bn", `%${fromValue}%`)
+      .ilike("standardized_to_bn", `%${toValue}%`);
     // TODO: 7. If no match? Search Reverse (from = to => to = from)
 
-    // Boilerplate for now: Set empty or mock results based on your logic later
+    //Set empty or mock results based on your logic
     setResults(data || []);
 
     setIsLoading(false);
