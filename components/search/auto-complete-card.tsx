@@ -3,16 +3,18 @@
 import { supabase } from "@/lib/supabase";
 import BanglishToBangla from "@/utils/banglish-to-bangla";
 import isBangla from "@/utils/isBangla";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, RefObject } from "react";
 
 interface AutoCompleteProps {
   value: string;
   setValue: (v: string) => void;
+  containerRef?: RefObject<HTMLDivElement | null>;
 }
 
 export default function AutoCompleteCard({
   value,
   setValue,
+  containerRef,
 }: AutoCompleteProps) {
   const [autocompleteVisible, setAutocompleteVisible] =
     useState<Boolean>(false);
@@ -20,6 +22,20 @@ export default function AutoCompleteCard({
     null,
   );
   const skipSearch = useRef(false);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        containerRef?.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setAutocompleteVisible(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [containerRef]);
 
   useEffect(() => {
     if (skipSearch.current) {

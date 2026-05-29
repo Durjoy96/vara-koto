@@ -25,6 +25,8 @@ const checkLanguageAndConvertBangla = async (
 export default function Search() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const fromContainerRef = useRef<HTMLDivElement>(null);
+  const toContainerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<any[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
@@ -53,23 +55,23 @@ export default function Search() {
     <>
       <div className="space-y-3 max-w-lg mx-auto text-sm lg:text-base">
         <form onSubmit={(e) => handleSubmit(e)}>
-          <div className="relative mb-3">
+          <div ref={fromContainerRef} className="relative mb-3">
             <Input
               onChange={(e) => setFrom(e.target.value)}
               placeholder="কোথা থেকে"
               className="h-12"
               value={from}
             />
-            <AutoCompleteCard value={from} setValue={setFrom} />
+            <AutoCompleteCard value={from} setValue={setFrom} containerRef={fromContainerRef} />
           </div>
-          <div className="relative mb-3">
+          <div ref={toContainerRef} className="relative mb-3">
             <Input
               onChange={(e) => setTo(e.target.value)}
               placeholder="কোথায়"
               className="h-12"
               value={to}
             />
-            <AutoCompleteCard value={to} setValue={setTo} />
+            <AutoCompleteCard value={to} setValue={setTo} containerRef={toContainerRef} />
           </div>
           <Button
             disabled={isLoading}
