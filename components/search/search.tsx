@@ -1,6 +1,6 @@
 "use client";
 
-import { Search as SearchIcon } from "lucide-react";
+import { ArrowDownUp, ArrowUpDown, Search as SearchIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useEffect, useRef, useState } from "react";
@@ -53,9 +53,9 @@ export default function Search() {
 
   return (
     <>
-      <div className="space-y-3 max-w-lg mx-auto text-sm lg:text-base">
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <div ref={fromContainerRef} className="relative mb-3">
+      <div className="max-w-lg mx-auto text-sm lg:text-base">
+        <form onSubmit={(e) => handleSubmit(e)} className="space-y-3">
+          <div ref={fromContainerRef} className="relative">
             <Input
               onChange={(e) => setFrom(e.target.value)}
               placeholder="কোথা থেকে"
@@ -113,7 +113,9 @@ export default function Search() {
               দুঃখিত, কোনো ডাটা পাওয়া যায়নি।
             </p>
             <Link href="/add">
-              <Button variant="outline">নতুন ভাড়া যুক্ত করুন</Button>
+              <Button className="cursor-pointer" variant="outline">
+                নতুন ভাড়া যুক্ত করুন
+              </Button>
             </Link>
           </div>
         )}

@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import Search from "@/components/search/search";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "হোম | ন্যায্য ভাড়া",
+  description:
+    "বাংলাদেশে যাতায়াতের ভাড়া নিয়ে একটি কমিউনিটি প্লাটফর্ম। নিজে ন্যায্য ভাড়া জানুন এবং অপরকে জানতে সাহায্য করুন।",
+};
 
 export default function Home() {
   return (

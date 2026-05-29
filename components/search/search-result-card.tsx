@@ -10,8 +10,8 @@ import {
 } from "../ui/card";
 import { Circle, CircleDashedIcon, Info, MapPin } from "lucide-react";
 import { englishToBanglaNumber } from "@/utils/english-to-bangla-number";
-import Image from "next/image";
 import { Badge } from "../ui/badge";
+import { VehicleToGari } from "@/utils/vehicle-to-gari";
 
 function VehicleCard({ vehicle }: { vehicle: string }) {
   return (
@@ -23,7 +23,7 @@ function VehicleCard({ vehicle }: { vehicle: string }) {
         height={40}
         className="object-contain"
       />
-      {vehicle}
+      {VehicleToGari(vehicle)}
     </span>
   );
 }
