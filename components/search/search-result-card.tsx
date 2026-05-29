@@ -1,66 +1,86 @@
 "use client";
 
-import { useState } from "react";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { ArrowRight } from "lucide-react";
+import { Circle, CircleDashedIcon, Info, MapPin } from "lucide-react";
 import { englishToBanglaNumber } from "@/utils/english-to-bangla-number";
+import Image from "next/image";
+import { Badge } from "../ui/badge";
+
+function VehicleCard({ vehicle }: { vehicle: string }) {
+  return (
+    <span className="inline-flex flex-col items-center bg-secondary py-1 px-3 rounded-lg text-sm text-muted-foreground border border-border">
+      <img
+        src={`/vehicles/${vehicle}.png`}
+        alt={vehicle}
+        width={40}
+        height={40}
+        className="object-contain"
+      />
+      {vehicle}
+    </span>
+  );
+}
 
 export default function SearchResultCard({ data }: { data: any }) {
-  const [upvotes, setUpvotes] = useState(data?.upvote || 0);
-  const [downvotes, setDownvotes] = useState(data?.downvote || 0);
-  const [hasVoted, setHasVoted] = useState<"up" | "down" | null>(null);
-
-  // Simple local state logic for UX. Real logic should call Supabase to update
-  const handleUpvote = () => {
-    if (hasVoted === "up") return;
-    setUpvotes((prev: number) => prev + 1);
-    if (hasVoted === "down") setDownvotes((prev: number) => prev - 1);
-    setHasVoted("up");
-  };
-
-  const handleDownvote = () => {
-    if (hasVoted === "down") return;
-    setDownvotes((prev: number) => prev + 1);
-    if (hasVoted === "up") setUpvotes((prev: number) => prev - 1);
-    setHasVoted("down");
-  };
-
   return (
-    <Card className="w-full transition-all hover:border-primary/50 shadow-sm hover:shadow-md">
-      <CardHeader className="pb-3 border-b border-border/50 bg-muted/10">
-        <CardTitle className="flex items-center gap-2 text-lg lg:text-xl font-bold">
-          <span className="text-card-foreground">
-            {data?.standardized_from_bn || "From Destination"}
-          </span>
-          <ArrowRight className="h-4 w-4 lg:h-5 lg:w-5 text-muted-foreground flex-shrink-0" />
-          <span className="text-card-foreground">
-            {data?.standardized_to_bn || "To Destination"}
-          </span>
-        </CardTitle>
-        <CardDescription className="text-sm lg:text-base font-medium">
-          {data?.vehicles.map((v: string, idx: number) => (
-            <span key={idx}>{v}</span>
-          ))}
+    <Card className="w-full transition-all gap-2 hover:border-primary/50 shadow-sm hover:shadow-md">
+      <CardHeader className="relative">
+        {data?.district && (
+          <CardTitle className="absolute top-0 right-4 flex justify-end">
+            <Badge variant="outline" className="text-muted-foreground">
+              {data?.district}
+            </Badge>
+          </CardTitle>
+        )}
+        <CardDescription className="flex items-center gap-2 text-base lg:text-lg font-semibold text-card-foreground">
+          <div className="flex flex-col items-center gap-0">
+            <Circle className="w-4 h-4 text-primary" />
+            <div className="w-px h-[15px] border border-dashed border-muted-foreground"></div>
+            <CircleDashedIcon className="w-4 h-4 text-muted-foreground" />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-card-foreground max-w-[380px] truncate">
+              {data?.standardized_from_bn || "From Destination"}
+            </span>
+            <span className="text-card-foreground max-w-[380px] truncate">
+              {data?.standardized_to_bn || "To Destination"}
+            </span>
+          </div>
         </CardDescription>
       </CardHeader>
-      <CardContent className="pt-5">
-        <div className="flex justify-between items-center gap-4">
-          <div>
-            <p className="text-xs lg:text-sm font-medium text-muted-foreground mb-1">
-              আনুমানিক ভাড়া
-            </p>
-            <p className="text-2xl lg:text-3xl font-extrabold tracking-tight">
-              ৳ {englishToBanglaNumber(data?.fare || 0)}
-            </p>
+      <CardContent>
+        <div>
+          <p className="text-xs lg:text-sm font-medium text-muted-foreground">
+            যানবাহন
+          </p>
+          <div className="flex gap-2 mt-1">
+            {data?.vehicles.map((v: string, idx: number) => (
+              <VehicleCard key={idx} vehicle={v} />
+            ))}
           </div>
         </div>
+        <div className="mt-2">
+          <p className="text-xs lg:text-sm font-medium text-muted-foreground mb-1">
+            ভাড়া
+          </p>
+          <p className="-mt-2 text-3xl lg:text-4xl text-primary font-extrabold tracking-tight">
+            ৳ {englishToBanglaNumber(data?.fare || 0)}
+          </p>
+        </div>
       </CardContent>
+      {data?.tips && (
+        <CardFooter className="gap-1">
+          <Info className="w-3 h-3 text-muted-foreground" />{" "}
+          <span className="text-xs text-muted-foreground">{data?.tips}</span>
+        </CardFooter>
+      )}
     </Card>
   );
 }

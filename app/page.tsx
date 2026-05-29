@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <main className="max-w-7xl mx-auto px-5 py-4">
       <div className="w-full flex items-center justify-between">
-        <h3 className="text-xl lg:text-2xl font-bold">ভাড়া কত?</h3>
+        <h3 className="text-xl lg:text-2xl font-bold">ন্যায্য ভাড়া</h3>
         <Link href="/add">
           <Button variant="secondary" className="cursor-pointer">
             <Plus /> ভাড়া যুক্ত করুন
