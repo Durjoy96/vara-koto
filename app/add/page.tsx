@@ -12,7 +12,8 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { LucideArrowRight } from "lucide-react";
+import { LucideArrowRight, LucideArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import isBangla from "@/utils/isBangla";
@@ -103,6 +104,13 @@ export default function Add() {
   return (
     <main className="max-w-7xl mx-auto px-5 py-6">
       <div>
+        <Link
+          href="/"
+          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-4 transition-colors"
+        >
+          <LucideArrowLeft className="w-4 h-4 mr-1" />
+          হোম
+        </Link>
         <h1 className="text-xl lg:text-2xl text-foreground font-bold">
           ভাড়া যুক্ত করুন
         </h1>

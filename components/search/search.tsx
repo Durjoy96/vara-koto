@@ -61,8 +61,13 @@ export default function Search() {
               placeholder="কোথা থেকে"
               className="h-12"
               value={from}
+              required
             />
-            <AutoCompleteCard value={from} setValue={setFrom} containerRef={fromContainerRef} />
+            <AutoCompleteCard
+              value={from}
+              setValue={setFrom}
+              containerRef={fromContainerRef}
+            />
           </div>
           <div ref={toContainerRef} className="relative mb-3">
             <Input
@@ -70,8 +75,13 @@ export default function Search() {
               placeholder="কোথায়"
               className="h-12"
               value={to}
+              required
             />
-            <AutoCompleteCard value={to} setValue={setTo} containerRef={toContainerRef} />
+            <AutoCompleteCard
+              value={to}
+              setValue={setTo}
+              containerRef={toContainerRef}
+            />
           </div>
           <Button
             disabled={isLoading}
