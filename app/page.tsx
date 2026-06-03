@@ -3,6 +3,8 @@ import Search from "@/components/search/search";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import SignInButton from "@/components/sign-in-button";
+import SignOutButton from "@/components/sign-out-button";
 
 export const metadata: Metadata = {
   title: "হোম | ন্যায্য ভাড়া",
@@ -20,12 +22,14 @@ export default function Home() {
             <Plus /> ভাড়া যুক্ত করুন
           </Button>
         </Link>
+        <SignInButton />
+        <SignOutButton />
       </div>
       <div className="mt-12 lg:mt-14 mb-8 lg:mb-10 mx-auto max-w-xl text-center">
         <h1 className="text-4xl lg:text-5xl font-bold tracking-tight leading-normal">
           যাত্রার আগে{" "}
           <span className="relative whitespace-nowrap py-0 px-2">
-            <span className="absolute bg-primary left-0 top-0 bottom-0 right-0 md:left-0 md:-top-0 md:-bottom-0 md:-right-3 -rotate-1"></span>
+            <span className="absolute bg-primary left-0 top-0 bottom-0 right-0 md:left-0 md:top-0 md:bottom-0 md:-right-3 -rotate-1"></span>
             <span className="relative text-primary-foreground">
               {" "}
               ন্যায্য ভাড়া জানুন

@@ -1,6 +1,6 @@
 "use client";
 
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import BanglishToBangla from "@/utils/banglish-to-bangla";
 import isBangla from "@/utils/isBangla";
 import { useEffect, useRef, useState, RefObject } from "react";
@@ -22,6 +22,7 @@ export default function AutoCompleteCard({
     null,
   );
   const skipSearch = useRef(false);
+  const supabase = createClient();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

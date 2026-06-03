@@ -1,5 +1,5 @@
-import { Checkbox } from "./ui/checkbox";
-import { Field, FieldContent, FieldTitle, FieldLabel } from "./ui/field";
+import { Checkbox } from "../ui/checkbox";
+import { Field, FieldContent, FieldTitle, FieldLabel } from "../ui/field";
 
 interface radioVehiclesProps {
   id: string;

@@ -4,13 +4,13 @@ import { ArrowDownUp, ArrowUpDown, Search as SearchIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useEffect, useRef, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import isBangla from "@/utils/isBangla";
 import BanglishToBangla from "@/utils/banglish-to-bangla";
 import AutoCompleteCard from "./auto-complete-card";
 import { Spinner } from "../ui/spinner";
 import Link from "next/link";
 import SearchResultCard from "./search-result-card";
+import { createClient } from "@/lib/supabase/client";
 
 const checkLanguageAndConvertBangla = async (
   value: string,
@@ -37,6 +37,7 @@ export default function Search() {
     setHasSearched(true);
     const fromValue = await checkLanguageAndConvertBangla(from);
     const toValue = await checkLanguageAndConvertBangla(to);
+    const supabase = createClient();
     //Search on supabase with from and to and language must be bangla Bangla text
     const { data, error } = await supabase
       .from("fares")
