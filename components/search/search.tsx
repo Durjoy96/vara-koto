@@ -102,7 +102,7 @@ export default function Search() {
           <div className="mt-8 space-y-4">
             <h3 className="text-lg font-semibold mb-4">Search Results:</h3>
             {results.map((result, index) => (
-              <SearchResultCard key={index} data={result} />
+              <SearchResultCard buttons={false} key={index} data={result} />
             ))}
           </div>
         )}

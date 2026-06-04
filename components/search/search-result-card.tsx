@@ -12,6 +12,8 @@ import { Circle, CircleDashedIcon, Info, MapPin } from "lucide-react";
 import { englishToBanglaNumber } from "@/utils/english-to-bangla-number";
 import { Badge } from "../ui/badge";
 import { VehicleToGari } from "@/utils/vehicle-to-gari";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Button } from "../ui/button";
 
 function VehicleCard({ vehicle }: { vehicle: string }) {
   return (
@@ -28,7 +30,13 @@ function VehicleCard({ vehicle }: { vehicle: string }) {
   );
 }
 
-export default function SearchResultCard({ data }: { data: any }) {
+export default function SearchResultCard({
+  data,
+  buttons,
+}: {
+  data?: any;
+  buttons: boolean;
+}) {
   return (
     <Card className="w-full transition-all gap-2 hover:border-primary/50 shadow-sm hover:shadow-md">
       <CardHeader className="relative">
@@ -47,10 +55,10 @@ export default function SearchResultCard({ data }: { data: any }) {
           </div>
           <div className="flex flex-col gap-1">
             <span className="text-card-foreground max-w-[380px] truncate">
-              {data?.standardized_from_bn || "From Destination"}
+              {data?.original_from || "From Destination"}
             </span>
             <span className="text-card-foreground max-w-[380px] truncate">
-              {data?.standardized_to_bn || "To Destination"}
+              {data?.original_to || "To Destination"}
             </span>
           </div>
         </CardDescription>
@@ -70,9 +78,31 @@ export default function SearchResultCard({ data }: { data: any }) {
           <p className="text-xs lg:text-sm font-medium text-muted-foreground mb-1">
             ভাড়া
           </p>
-          <p className="-mt-2 text-3xl lg:text-4xl text-primary font-extrabold tracking-tight">
-            ৳ {englishToBanglaNumber(data?.fare || 0)}
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="-mt-2 text-3xl lg:text-4xl text-primary font-extrabold tracking-tight">
+              ৳ {englishToBanglaNumber(data?.fare || 0)}
+            </p>
+            {buttons && (
+              <div className="flex gap-1">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="secondary">edit</Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Comming soon</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="secondary">delete</Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Comming soon</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            )}
+          </div>
         </div>
       </CardContent>
       {data?.tips && (

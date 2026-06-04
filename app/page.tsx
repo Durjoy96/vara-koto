@@ -1,30 +1,15 @@
 import type { Metadata } from "next";
 import Search from "@/components/search/search";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import Link from "next/link";
-import SignInButton from "@/components/sign-in-button";
-import SignOutButton from "@/components/sign-out-button";
 
 export const metadata: Metadata = {
   title: "হোম | ন্যায্য ভাড়া",
   description:
-    "বাংলাদেশে যাতায়াতের ভাড়া নিয়ে একটি কমিউনিটি প্লাটফর্ম। নিজে ন্যায্য ভাড়া জানুন এবং অপরকে জানতে সাহায্য করুন।",
+    "বাংলাদেশে যাতায়াতের ভাড়া নিয়ে একটি কমিউনিটি প্লাটফর্ম। নিজে ন্যায্য ভাড়া জানুন এবং অন্যকে জানতে সাহায্য করুন।",
 };
 
 export default function Home() {
   return (
     <main className="max-w-7xl mx-auto px-5 py-4">
-      <div className="w-full flex items-center justify-between">
-        <h3 className="text-xl lg:text-2xl font-bold">ন্যায্য ভাড়া</h3>
-        <Link href="/add">
-          <Button variant="secondary" className="cursor-pointer">
-            <Plus /> ভাড়া যুক্ত করুন
-          </Button>
-        </Link>
-        <SignInButton />
-        <SignOutButton />
-      </div>
       <div className="mt-12 lg:mt-14 mb-8 lg:mb-10 mx-auto max-w-xl text-center">
         <h1 className="text-4xl lg:text-5xl font-bold tracking-tight leading-normal">
           যাত্রার আগে{" "}
@@ -38,7 +23,7 @@ export default function Home() {
         </h1>
         <p className="mt-4 text-sm md:text-base font-normal text-muted-foreground">
           বাংলাদেশে যাতায়াতের ভাড়া নিয়ে একটি কমিউনিটি প্লাটফর্ম। নিজে ন্যায্য
-          ভাড়া জানুন এবং অপরকে জানতে সাহায্য করুন।
+          ভাড়া জানুন এবং অন্যকে জানতে সাহায্য করুন।
         </p>
       </div>
       {/* search */}

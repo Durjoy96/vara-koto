@@ -204,7 +204,7 @@ export default function SubmitForm() {
         {/* vehicle type */}
         <Field>
           <FieldLabel>যানবাহন</FieldLabel>
-          <FieldGroup className="w-full grid grid-cols-3 lg:grid-cols-৪">
+          <FieldGroup className="w-full grid grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3">
             {vehiclesList.map((i, idx) => (
               <CheckboxVehcileCard
                 key={idx}
@@ -261,11 +261,11 @@ export default function SubmitForm() {
         </Button>
         {/* Login status hint */}
         {user ? (
-          <p className="text-left text-xs text-muted-foreground">
+          <p className="text-center lg:text-left text-xs text-muted-foreground">
             {user.user_metadata?.full_name ?? "আপনি"} হিসেবে যুক্ত হবে
           </p>
         ) : (
-          <p className="text-left text-xs text-muted-foreground">
+          <p className="text-center lg:text-left text-xs text-muted-foreground">
             Guest হিসেবে যুক্ত হবে
           </p>
         )}

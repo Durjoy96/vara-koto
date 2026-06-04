@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Hind_Siliguri } from "next/font/google";
 import { Toaster } from "sonner";
 import "./globals.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import Navbar from "@/components/navbar";
 
 const hindSiliguri = Hind_Siliguri({
   variable: "--font-hind-siliguri",
@@ -23,9 +25,13 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${hindSiliguri.variable} min-h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body>
-        {children}
+      <body className="bg-background text-foreground" suppressHydrationWarning>
+        <header className="sticky top-0 bg-background">
+          <Navbar />
+        </header>
+        <TooltipProvider>{children}</TooltipProvider>
         <Toaster position="top-center" theme="dark" />
       </body>
     </html>
