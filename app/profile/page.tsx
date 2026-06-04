@@ -3,6 +3,12 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import SearchResultCard from "@/components/search/search-result-card";
 import Image from "next/image";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "প্রোফাইল | ন্যায্য ভাড়া",
+  description: "আপনার জমা দেওয়া ভাড়াগুলো",
+};
 
 export default async function ProfilePage() {
   const supabase = await createClient();

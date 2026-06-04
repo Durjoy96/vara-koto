@@ -66,7 +66,7 @@ export default function Navbar() {
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-32">
                 <DropdownMenuGroup>
                   <DropdownMenuItem
                     onClick={() => router.push("/profile")}

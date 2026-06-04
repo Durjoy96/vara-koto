@@ -1,6 +1,4 @@
 import SubmitForm from "@/components/submit-fare/submit-form";
-import { LucideArrowLeft } from "lucide-react";
-import Link from "next/link";
 
 export default function Add() {
   return (
