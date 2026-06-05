@@ -39,12 +39,22 @@ export default function Search() {
     const toValue = await checkLanguageAndConvertBangla(to);
     const supabase = createClient();
     //Search on supabase with from and to and language must be bangla Bangla text
-    const { data, error } = await supabase
+    let { data, error } = await supabase
       .from("fares")
       .select("*")
       .ilike("standardized_from_bn", `%${fromValue}%`)
       .ilike("standardized_to_bn", `%${toValue}%`);
-    // TODO: 7. If no match? Search Reverse (from = to => to = from)
+
+    // If no match, search Reverse (from = to => to = from)
+    if (!data || data.length === 0) {
+      const { data: reverseData } = await supabase
+        .from("fares")
+        .select("*")
+        .ilike("standardized_from_bn", `%${toValue}%`)
+        .ilike("standardized_to_bn", `%${fromValue}%`);
+
+      data = reverseData;
+    }
 
     //Set empty or mock results based on your logic
     setResults(data || []);
