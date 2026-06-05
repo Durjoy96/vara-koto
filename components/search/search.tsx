@@ -88,11 +88,7 @@ export default function Search() {
             disabled={isLoading}
             className="w-full cursor-pointer h-12 mt-3 lg:mt-5"
           >
-            {isLoading ? (
-              <Spinner className="mr-2" />
-            ) : (
-              <SearchIcon className="mr-2 h-4 w-4" />
-            )}
+            {isLoading ? <Spinner /> : <SearchIcon className="h-4 w-4" />}
             ভাড়া খুঁজুন
           </Button>
         </form>

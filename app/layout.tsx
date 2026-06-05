@@ -27,7 +27,10 @@ export default function RootLayout({
       className={`${hindSiliguri.variable} min-h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="bg-background text-foreground" suppressHydrationWarning>
+      <body
+        className="bg-background text-foreground min-h-lvh"
+        suppressHydrationWarning
+      >
         <header className="sticky top-0 bg-background">
           <Navbar />
         </header>

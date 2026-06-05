@@ -95,7 +95,7 @@ export default function AutoCompleteCard({
       {fromData !== null &&
         fromData?.length > 0 &&
         autocompleteVisible === true && (
-          <div className="z-50 absolute left-0 right-0 -bottom-10 bg-card px-1 py-1 rounded-xl border">
+          <div className="z-50 absolute left-0 right-0 top-13 bg-card px-1 py-1 rounded-xl border">
             {fromData?.map(
               (i, idx) =>
                 i !== false && (
