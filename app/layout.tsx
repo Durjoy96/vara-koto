@@ -31,7 +31,7 @@ export default function RootLayout({
         className="bg-background text-foreground min-h-lvh"
         suppressHydrationWarning
       >
-        <header className="sticky top-0 bg-background">
+        <header className="sticky top-0 bg-background z-50">
           <Navbar />
         </header>
         <TooltipProvider>{children}</TooltipProvider>

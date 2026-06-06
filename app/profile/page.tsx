@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import SearchResultCard from "@/components/search/search-result-card";
 import Image from "next/image";
 import { Metadata } from "next";
+import { englishToBanglaNumber } from "@/utils/english-to-bangla-number";
 
 export const metadata: Metadata = {
   title: "প্রোফাইল | ন্যায্য ভাড়া",
@@ -45,7 +46,7 @@ export default async function ProfilePage() {
               {user.user_metadata?.full_name ?? "আপনার profile"}
             </h1>
             <p className="text-xs text-muted-foreground">
-              {fares?.length ?? 0}টি ভাড়া যোগ করেছেন
+              {englishToBanglaNumber(fares?.length) ?? 0}টি ভাড়া যোগ করেছেন
             </p>
           </div>
         </div>

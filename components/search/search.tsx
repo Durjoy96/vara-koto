@@ -1,9 +1,9 @@
 "use client";
 
-import { ArrowDownUp, ArrowUpDown, Search as SearchIcon } from "lucide-react";
+import { Search as SearchIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import isBangla from "@/utils/isBangla";
 import BanglishToBangla from "@/utils/banglish-to-bangla";
 import AutoCompleteCard from "./auto-complete-card";
@@ -22,7 +22,11 @@ const checkLanguageAndConvertBangla = async (
   }
 };
 
-export default function Search() {
+export default function Search({
+  recentlyAdded,
+}: {
+  recentlyAdded?: React.ReactNode;
+}) {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const fromContainerRef = useRef<HTMLDivElement>(null);
@@ -103,15 +107,21 @@ export default function Search() {
           </Button>
         </form>
 
-        {/* Show the result, for each route one card */}
-        {hasSearched && !isLoading && results.length > 0 && (
-          <div className="mt-8 space-y-4">
-            <h3 className="text-lg font-semibold mb-4">Search Results:</h3>
-            {results.map((result, index) => (
-              <SearchResultCard buttons={false} key={index} data={result} />
-            ))}
-          </div>
-        )}
+        {/* Show the result and recently added */}
+        <div className="mt-8">
+          {hasSearched && !isLoading && results.length > 0 ? (
+            <div className=" space-y-4">
+              <h3 className="text-muted-foreground font-medium mb-4">
+                Search Results
+              </h3>
+              {results.map((result, index) => (
+                <SearchResultCard buttons={false} key={index} data={result} />
+              ))}
+            </div>
+          ) : (
+            recentlyAdded
+          )}
+        </div>
 
         {/* handle no data found with add button with will redirect to the /add page */}
         {hasSearched && !isLoading && results.length === 0 && (

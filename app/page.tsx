@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Search from "@/components/search/search";
+import RecentlyAdded from "@/components/recently-added/recently-added";
 
 export const metadata: Metadata = {
   title: "হোম | ন্যায্য ভাড়া",
@@ -27,7 +28,7 @@ export default function Home() {
         </p>
       </div>
       {/* search */}
-      <Search />
+      <Search recentlyAdded={<RecentlyAdded />} />
     </main>
   );
 }
