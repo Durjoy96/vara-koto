@@ -89,7 +89,7 @@ export default function SearchResultCard({
                     <Button variant="secondary">edit</Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Comming soon</p>
+                    <p>Coming soon</p>
                   </TooltipContent>
                 </Tooltip>
                 <Tooltip>
@@ -97,7 +97,7 @@ export default function SearchResultCard({
                     <Button variant="secondary">delete</Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Comming soon</p>
+                    <p>Coming soon</p>
                   </TooltipContent>
                 </Tooltip>
               </div>

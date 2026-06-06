@@ -107,9 +107,9 @@ export default function Search({
           </Button>
         </form>
 
-        {/* Show the result and recently added */}
+        {/* Show the result or recently added */}
         <div className="mt-8">
-          {hasSearched && !isLoading && results.length > 0 ? (
+          {hasSearched && !isLoading && results.length > 0 && (
             <div className=" space-y-4">
               <h3 className="text-muted-foreground font-medium mb-4">
                 Search Results
@@ -118,9 +118,9 @@ export default function Search({
                 <SearchResultCard buttons={false} key={index} data={result} />
               ))}
             </div>
-          ) : (
-            recentlyAdded
           )}
+
+          {!hasSearched && recentlyAdded}
         </div>
 
         {/* handle no data found with add button with will redirect to the /add page */}
