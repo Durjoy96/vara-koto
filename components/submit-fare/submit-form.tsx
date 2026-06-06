@@ -95,7 +95,7 @@ export default function SubmitForm() {
   };
 
   const isVaild =
-    form.from_text && form.to_text && form.fare && vehicles.length > 0;
+    form.from_text.trim() && form.to_text.trim() && form.fare && vehicles.length > 0;
 
   function submitBtnHandler() {
     setHasSubmitted(true);
@@ -118,16 +118,18 @@ export default function SubmitForm() {
   async function submitFare() {
     try {
       setLoading(true);
+      const fromTextTrimmed = form.from_text.trim();
+      const toTextTrimmed = form.to_text.trim();
       const supabase = createClient();
       const { data, error } = await supabase.from("fares").insert({
-        original_from: form.from_text,
-        standardized_from_bn: !isBangla(form.from_text)
-          ? await BanglishToBangla(form.from_text)
-          : form.from_text,
-        original_to: form.to_text,
-        standardized_to_bn: !isBangla(form.to_text)
-          ? await BanglishToBangla(form.to_text)
-          : form.to_text,
+        original_from: fromTextTrimmed,
+        standardized_from_bn: !isBangla(fromTextTrimmed)
+          ? await BanglishToBangla(fromTextTrimmed)
+          : fromTextTrimmed,
+        original_to: toTextTrimmed,
+        standardized_to_bn: !isBangla(toTextTrimmed)
+          ? await BanglishToBangla(toTextTrimmed)
+          : toTextTrimmed,
         fare: Number(form.fare),
         vehicles: vehicles,
         district: district,

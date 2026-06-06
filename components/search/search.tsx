@@ -39,8 +39,8 @@ export default function Search({
     e.preventDefault();
     setIsLoading(true);
     setHasSearched(true);
-    const fromValue = await checkLanguageAndConvertBangla(from);
-    const toValue = await checkLanguageAndConvertBangla(to);
+    const fromValue = await checkLanguageAndConvertBangla(from.trim());
+    const toValue = await checkLanguageAndConvertBangla(to.trim());
     const supabase = createClient();
     //Search on supabase with from and to and language must be bangla Bangla text
     let { data, error } = await supabase
