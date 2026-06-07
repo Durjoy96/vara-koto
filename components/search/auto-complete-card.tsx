@@ -45,14 +45,13 @@ export default function AutoCompleteCard({
     }
 
     const delayTimer = setTimeout(async () => {
-      const trimmedValue = value.trim();
-      if (trimmedValue.length > 1) {
+      if (value.length > 1) {
         let queryText = "";
 
-        if (!isBangla(trimmedValue)) {
-          queryText = await BanglishToBangla(trimmedValue);
+        if (!isBangla(value)) {
+          queryText = await BanglishToBangla(value);
         } else {
-          queryText = trimmedValue;
+          queryText = value;
         }
 
         const { data, error } = await supabase

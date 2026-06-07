@@ -42,21 +42,48 @@ export default function Search({
     const fromValue = await checkLanguageAndConvertBangla(from.trim());
     const toValue = await checkLanguageAndConvertBangla(to.trim());
     const supabase = createClient();
-    //Search on supabase with from and to and language must be bangla Bangla text
-    let { data, error } = await supabase
-      .from("fares")
-      .select("*")
-      .ilike("standardized_from_bn", `%${fromValue}%`)
-      .ilike("standardized_to_bn", `%${toValue}%`);
+
+    // Split into words to make search more resilient
+    const fromWords = fromValue.split(/\s+/).filter(Boolean);
+    const toWords = toValue.split(/\s+/).filter(Boolean);
+
+    let query = supabase.from("fares").select("*");
+
+    if (fromWords.length > 0) {
+      const fromConditions = fromWords
+        .map((w) => `standardized_from_bn.ilike.%${w}%`)
+        .join(",");
+      query = query.or(fromConditions);
+    }
+
+    if (toWords.length > 0) {
+      const toConditions = toWords
+        .map((w) => `standardized_to_bn.ilike.%${w}%`)
+        .join(",");
+      query = query.or(toConditions);
+    }
+
+    let { data, error } = await query;
 
     // If no match, search Reverse (from = to => to = from)
     if (!data || data.length === 0) {
-      const { data: reverseData } = await supabase
-        .from("fares")
-        .select("*")
-        .ilike("standardized_from_bn", `%${toValue}%`)
-        .ilike("standardized_to_bn", `%${fromValue}%`);
+      let reverseQuery = supabase.from("fares").select("*");
 
+      if (toWords.length > 0) {
+        const fromReverseConditions = toWords
+          .map((w) => `standardized_from_bn.ilike.%${w}%`)
+          .join(",");
+        reverseQuery = reverseQuery.or(fromReverseConditions);
+      }
+
+      if (fromWords.length > 0) {
+        const toReverseConditions = fromWords
+          .map((w) => `standardized_to_bn.ilike.%${w}%`)
+          .join(",");
+        reverseQuery = reverseQuery.or(toReverseConditions);
+      }
+
+      const { data: reverseData } = await reverseQuery;
       data = reverseData;
     }
 
