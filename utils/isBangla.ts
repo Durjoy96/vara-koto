@@ -5,7 +5,3 @@ export default function isBangla(text: string): boolean {
   }
   return /[\u0980-\u09FF]/.test(text);
 }
-
-const res = isBangla("জগন্নাথগঞ্জ ঘাট");
-
-console.log(res);

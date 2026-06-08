@@ -39,57 +39,96 @@ export default function Search({
     e.preventDefault();
     setIsLoading(true);
     setHasSearched(true);
-    const fromValue = await checkLanguageAndConvertBangla(from.trim());
-    const toValue = await checkLanguageAndConvertBangla(to.trim());
+
+    const fromBangla = await checkLanguageAndConvertBangla(from.trim());
+    const toBangla = await checkLanguageAndConvertBangla(to.trim());
     const supabase = createClient();
 
-    // Split into words to make search more resilient
-    const fromWords = fromValue.split(/\s+/).filter(Boolean);
-    const toWords = toValue.split(/\s+/).filter(Boolean);
+    // Debug: log what text we're actually searching with
+    console.log("[Search Debug]", {
+      rawFrom: from.trim(),
+      rawTo: to.trim(),
+      convertedFrom: fromBangla,
+      convertedTo: toBangla,
+    });
 
-    let query = supabase.from("fares").select("*");
+    // Split inputs into words (strip commas — they break Supabase .or() filter syntax)
+    const splitWords = (text: string) =>
+      text
+        .split(/[\s,।.]+/)
+        .map((w) => w.replace(/[,।.]/g, "").trim())
+        .filter((w) => w.length > 0);
 
-    if (fromWords.length > 0) {
-      const fromConditions = fromWords
-        .map((w) => `standardized_from_bn.ilike.%${w}%`)
-        .join(",");
-      query = query.or(fromConditions);
+    const fromParts = splitWords(fromBangla);
+    const toParts = splitWords(toBangla);
+
+    let data: any[] | null = null;
+
+    // Strategy 1: Exact route match — every from-word must match from fields AND every to-word must match to fields
+    // Chaining .or() calls creates AND between them, so each word is required
+    {
+      let query = supabase.from("fares").select("*");
+
+      for (const w of fromParts) {
+        query = query.or(
+          `standardized_from_bn.ilike.%${w}%,original_from.ilike.%${w}%`,
+        );
+      }
+      for (const w of toParts) {
+        query = query.or(
+          `standardized_to_bn.ilike.%${w}%,original_to.ilike.%${w}%`,
+        );
+      }
+
+      const { data: exactData, error } = await query;
+      if (error) console.error("[Search] Strategy 1 error:", error);
+      if (exactData && exactData.length > 0) data = exactData;
     }
 
-    if (toWords.length > 0) {
-      const toConditions = toWords
-        .map((w) => `standardized_to_bn.ilike.%${w}%`)
-        .join(",");
-      query = query.or(toConditions);
-    }
-
-    let { data, error } = await query;
-
-    // If no match, search Reverse (from = to => to = from)
+    // Strategy 2: Reverse direction — from-words match to fields AND to-words match from fields
     if (!data || data.length === 0) {
-      let reverseQuery = supabase.from("fares").select("*");
+      let query = supabase.from("fares").select("*");
 
-      if (toWords.length > 0) {
-        const fromReverseConditions = toWords
-          .map((w) => `standardized_from_bn.ilike.%${w}%`)
-          .join(",");
-        reverseQuery = reverseQuery.or(fromReverseConditions);
+      for (const w of fromParts) {
+        query = query.or(
+          `standardized_to_bn.ilike.%${w}%,original_to.ilike.%${w}%`,
+        );
+      }
+      for (const w of toParts) {
+        query = query.or(
+          `standardized_from_bn.ilike.%${w}%,original_from.ilike.%${w}%`,
+        );
       }
 
-      if (fromWords.length > 0) {
-        const toReverseConditions = fromWords
-          .map((w) => `standardized_to_bn.ilike.%${w}%`)
-          .join(",");
-        reverseQuery = reverseQuery.or(toReverseConditions);
-      }
-
-      const { data: reverseData } = await reverseQuery;
-      data = reverseData;
+      const { data: reverseData, error } = await query;
+      if (error) console.error("[Search] Strategy 2 error:", error);
+      if (reverseData && reverseData.length > 0) data = reverseData;
     }
 
-    //Set empty or mock results based on your logic
-    setResults(data || []);
+    // Strategy 3: Broad word-level fallback — any word matches any location field
+    if (!data || data.length === 0) {
+      const allWords = [...fromParts, ...toParts];
 
+      if (allWords.length > 0) {
+        const conditions = allWords.flatMap((w) => [
+          `standardized_from_bn.ilike.%${w}%`,
+          `standardized_to_bn.ilike.%${w}%`,
+          `original_from.ilike.%${w}%`,
+          `original_to.ilike.%${w}%`,
+        ]);
+
+        const { data: broadData, error } = await supabase
+          .from("fares")
+          .select("*")
+          .or(conditions.join(","));
+
+        if (error) console.error("[Search] Strategy 3 error:", error);
+        if (broadData && broadData.length > 0) data = broadData;
+      }
+    }
+
+    console.log("[Search Debug] Results found:", data?.length ?? 0);
+    setResults(data || []);
     setIsLoading(false);
   }
 

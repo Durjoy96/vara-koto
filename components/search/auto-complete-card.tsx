@@ -18,7 +18,7 @@ export default function AutoCompleteCard({
 }: AutoCompleteProps) {
   const [autocompleteVisible, setAutocompleteVisible] =
     useState<Boolean>(false);
-  const [fromData, setFromData] = useState<Array<string | boolean> | null>(
+  const [fromData, setFromData] = useState<string[] | null>(
     null,
   );
   const skipSearch = useRef(false);
@@ -56,9 +56,9 @@ export default function AutoCompleteCard({
 
         const { data, error } = await supabase
           .from("fares")
-          .select("standardized_from_bn, standardized_to_bn")
+          .select("standardized_from_bn, standardized_to_bn, original_from, original_to")
           .or(
-            `standardized_from_bn.ilike.%${queryText}%,standardized_to_bn.ilike.%${queryText}%`,
+            `standardized_from_bn.ilike.%${queryText}%,standardized_to_bn.ilike.%${queryText}%,original_from.ilike.%${queryText}%,original_to.ilike.%${queryText}%`,
           )
           .limit(8);
 
@@ -68,19 +68,22 @@ export default function AutoCompleteCard({
         }
 
         if (data) {
-          const allPlaces = [
-            ...data.map(
-              (r) =>
-                r.standardized_from_bn.includes(queryText) &&
-                r.standardized_from_bn,
-            ),
-
-            ...data.map(
-              (r) =>
-                r.standardized_to_bn.includes(queryText) &&
-                r.standardized_to_bn,
-            ),
-          ];
+          const queryLower = queryText.toLowerCase();
+          const allPlaces: string[] = [];
+          for (const r of data) {
+            if (r.standardized_from_bn?.toLowerCase().includes(queryLower)) {
+              allPlaces.push(r.standardized_from_bn);
+            }
+            if (r.standardized_to_bn?.toLowerCase().includes(queryLower)) {
+              allPlaces.push(r.standardized_to_bn);
+            }
+            if (r.original_from?.toLowerCase().includes(queryLower)) {
+              allPlaces.push(r.original_from);
+            }
+            if (r.original_to?.toLowerCase().includes(queryLower)) {
+              allPlaces.push(r.original_to);
+            }
+          }
           const uniquePlaces = [...new Set(allPlaces)];
           setFromData(uniquePlaces);
           setAutocompleteVisible(true);
@@ -96,22 +99,19 @@ export default function AutoCompleteCard({
         fromData?.length > 0 &&
         autocompleteVisible === true && (
           <div className="z-50 absolute left-0 right-0 top-13 bg-card px-1 py-1 rounded-xl border">
-            {fromData?.map(
-              (i, idx) =>
-                i !== false && (
+            {fromData?.map((place, idx) => (
                   <div
                     key={idx}
                     onClick={() => {
                       skipSearch.current = true;
-                      setValue(i as string);
+                      setValue(place);
                       setAutocompleteVisible(false);
                     }}
                     className="text-sm hover:bg-secondary hover:text-secondary-foreground px-1 py-1 rounded-lg truncate"
                   >
-                    {i}
+                    {place}
                   </div>
-                ),
-            )}
+            ))}
           </div>
         )}
     </>
