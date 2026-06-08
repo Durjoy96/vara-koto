@@ -86,7 +86,6 @@ export default function SubmitForm() {
     } = supabase.auth.onAuthStateChange((_event, session) =>
       setUser(session?.user ?? null),
     );
-    console.log(user);
     return () => subscription.unsubscribe();
   }, []);
 
@@ -95,7 +94,10 @@ export default function SubmitForm() {
   };
 
   const isVaild =
-    form.from_text.trim() && form.to_text.trim() && form.fare && vehicles.length > 0;
+    form.from_text.trim() &&
+    form.to_text.trim() &&
+    form.fare &&
+    vehicles.length > 0;
 
   function submitBtnHandler() {
     setHasSubmitted(true);

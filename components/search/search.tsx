@@ -45,12 +45,12 @@ export default function Search({
     const supabase = createClient();
 
     // Debug: log what text we're actually searching with
-    console.log("[Search Debug]", {
+    /*     console.log("[Search Debug]", {
       rawFrom: from.trim(),
       rawTo: to.trim(),
       convertedFrom: fromBangla,
       convertedTo: toBangla,
-    });
+    }); */
 
     // Split inputs into words (strip commas — they break Supabase .or() filter syntax)
     const splitWords = (text: string) =>
@@ -127,7 +127,7 @@ export default function Search({
       }
     }
 
-    console.log("[Search Debug] Results found:", data?.length ?? 0);
+    // console.log("[Search Debug] Results found:", data?.length ?? 0);
     setResults(data || []);
     setIsLoading(false);
   }
